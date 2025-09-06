@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Login - MySite</title>
+  <style>
+    body {
+      font-family: Inter, system-ui, sans-serif;
+      margin: 0;
+      background: #2E7D32;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .logo-container {
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+    .logo-container img {
+      width: 120px;
+      height: auto;
+    }
+    .login-box {
+      background: white;
+      padding: 2rem 2.5rem;
+      border-radius: 14px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+    .login-title {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: #2E7D32;
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    input {
+      width: 100%;
+      padding: .75rem;
+      margin: .5rem 0 1rem;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+    button {
+      width: 100%;
+      padding: .8rem;
+      background: #2E7D32;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: .2s;
+    }
+    button:hover { background: #256428; }
+    .signup {
+      text-align: center;
+      margin-top: 1rem;
+      font-size: .9rem;
+    }
+    .signup a {
+      color: #2E7D32;
+      text-decoration: none;
+    }
+    .signup a:hover { text-decoration: underline; }
+    .error {
+      color: red;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- login box -->
+  <div class="login-box">
+    <div class="logo-container">
+      <img src="https://img.icons8.com/color/96/000000/leaf.png" alt="Company Logo">
+    </div>
+    <div class="login-title">Welcome Back</div>
+
+    <form id="loginForm">
+      <input id="email" type="email" placeholder="Email" required>
+      <input id="password" type="password" placeholder="Password" required>
+      <button type="submit">Login</button>
+    </form>
+
+    <div class="error" id="errorMsg"></div>
+
+    <div class="signup">
+      Don’t have an account? <a href="signup.html">Sign Up</a>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("loginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const errorMsg = document.getElementById("errorMsg");
+
+      try {
+        const res = await fetch("/api/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          // save token in session storage
+          sessionStorage.setItem("token", data.token);
+          // redirect to landing page
+          window.location.href = "index.html";
+        } else {
+          errorMsg.textContent = data.message || "Login failed";
+        }
+      } catch (err) {
+        errorMsg.textContent = "Server error. Try again.";
+      }
+    });
+  </script>
+
+</body>
+</html>
