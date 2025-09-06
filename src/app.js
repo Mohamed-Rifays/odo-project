@@ -24,6 +24,9 @@ mongoose.connect('mongodb://127.0.0.1:27017/ecofinds', {
 }).then(() => console.log("✅ MongoDB connected"))
   .catch(err => console.error(err));
 
+/* =======================
+   USER MODEL + ROUTES
+========================= */
 // 🔹 User Schema
 const userSchema = new mongoose.Schema({
   name: String,
@@ -52,12 +55,10 @@ function authMiddleware(req, res, next) {
   }
 }
 
-// ROUTES
+// Serve pages
 app.get('', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/index.html'));
 });
-
-// Serve login page
 app.get('/login', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/login.html'));
 });
@@ -129,6 +130,101 @@ app.put('/api/me', authMiddleware, async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+
+/* =======================
+   PRODUCT MODEL + ROUTES
+========================= */
+// 🔹 Product Schema
+const productSchema = new mongoose.Schema({
+  name: String,
+  description: String,
+  price: Number,
+  image: { type: String, default: '/img/placeholder.png' },
+  category: String,
+  condition: { type: String, enum: ["new", "used"], default: "used" },
+  seller: { type: mongoose.Schema.Types.ObjectId, ref: "User" }
+}, { timestamps: true });
+
+const Product = mongoose.model('Product', productSchema);
+
+// Get all products
+app.get('/api/products', async (req, res) => {
+  try {
+    const products = await Product.find().sort({ createdAt: -1 });
+    res.json(products);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Get single product
+app.get('/api/products/:id', async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) return res.status(404).json({ message: "Product not found" });
+    res.json(product);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Add a new product (logged in only)
+app.post('/api/products', authMiddleware, async (req, res) => {
+  try {
+    const { name, description, price, image, category, condition } = req.body;
+
+    const newProduct = new Product({
+      name,
+      description,
+      price,
+      image,
+      category,
+      condition,
+      seller: req.userId
+    });
+
+    await newProduct.save();
+    res.json(newProduct);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// Update a product (only seller can update)
+app.put('/api/products/:id', authMiddleware, async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) return res.status(404).json({ message: "Product not found" });
+
+    if (product.seller.toString() !== req.userId) {
+      return res.status(403).json({ message: "Not authorized" });
+    }
+
+    Object.assign(product, req.body);
+    await product.save();
+    res.json(product);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// Delete a product
+app.delete('/api/products/:id', authMiddleware, async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) return res.status(404).json({ message: "Product not found" });
+
+    if (product.seller.toString() !== req.userId) {
+      return res.status(403).json({ message: "Not authorized" });
+    }
+
+    await product.deleteOne();
+    res.json({ message: "Product deleted" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 
 app.listen(5000, '0.0.0.0', () => {
   console.log("🚀 Server running on http://localhost:5000");

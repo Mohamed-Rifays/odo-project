@@ -12,7 +12,7 @@
       --height: 52vh;
       --dot-size: 10px;
     }
-    body { font-family: Inter, system-ui, sans-serif; margin: 0; }
+    body { font-family: Inter, system-ui, sans-serif; margin: 0; background: #fafafa; }
 
     /* HEADER */
     .header {
@@ -26,86 +26,25 @@
       z-index: 10;
     }
     .logo img { height: 40px; }
-    .navigations {
-      display: flex;
-      gap: 20px;
-    }
+    .navigations { display: flex; gap: 20px; }
     .navigations a {
-      color: white;
-      text-decoration: none;
-      font-weight: 500;
-      cursor: pointer;
-      transition: 0.2s;
+      color: white; text-decoration: none; font-weight: 500;
+      cursor: pointer; transition: 0.2s;
     }
     .navigations a:hover { text-decoration: underline; }
-    .cart-user { display: flex; align-items: center; gap: 20px; }
-    .cart-logo { width: 40px; cursor: pointer; }
-    .user-profile {
-      width: 35px;
-      height: 35px;
-      border-radius: 50%;
-      object-fit: cover;
-      cursor: pointer;
-    }
+    .cart-user { display: flex; align-items: center; gap: 15px; }
+    .cart-logo { width: 32px; cursor: pointer; }
     .user-avatar {
-      width: 35px;
-      height: 35px;
-      border-radius: 50%;
-      background: #1b5e20;
-      color: white;
-      font-weight: bold;
-      font-size: 18px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-    }
-
-    /* Hamburger */
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-    }
-    .hamburger span {
-      width: 25px;
-      height: 3px;
-      background: white;
-      border-radius: 2px;
-      transition: 0.3s;
-    }
-
-    /* Mobile Nav */
-    .mobile-nav {
-      max-height: 0;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      background: var(--brand);
-      padding: 0 20px;
-      transition: max-height 0.4s ease, padding 0.4s ease;
-    }
-    .mobile-nav.open {
-      max-height: 300px; /* enough space for links */
-      padding: 15px 20px;
-    }
-    .mobile-nav a {
-      color: white;
-      text-decoration: none;
-      font-weight: 500;
+      width: 35px; height: 35px; border-radius: 50%;
+      object-fit: cover; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      background: #1b5e20; color: white; font-weight: bold; font-size: 18px;
     }
 
     /* SEARCH */
     .search-box { display: flex; justify-content: center; margin: 30px 0 15px 0; }
     .search-input-box {
-      width: 600px;
-      max-width: 90%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      transition: 0.2s;
+      width: 600px; max-width: 90%; padding: 10px;
+      border: 1px solid #ccc; border-radius: 10px; transition: 0.2s;
     }
     .search-input-box:hover {
       border-color: var(--brand);
@@ -113,21 +52,10 @@
     }
 
     /* OPTIONS */
-    .options {
-      display: flex;
-      gap: 15px;
-      justify-content: flex-end;
-      margin-bottom: 20px;
-      margin-right: 3px;
-    }
+    .options { display: flex; gap: 15px; justify-content: flex-end; margin: 0 20px 20px 20px; }
     .options select {
-      padding: 8px 12px;
-      border: 1px solid #aaa;
-      border-radius: 6px;
-      background: white;
-      font-size: 14px;
-      cursor: pointer;
-      transition: 0.2s;
+      padding: 8px 12px; border: 1px solid #aaa; border-radius: 6px;
+      background: white; font-size: 14px; cursor: pointer; transition: 0.2s;
     }
     .options select:hover {
       border-color: var(--brand);
@@ -136,230 +64,131 @@
 
     /* BANNER SLIDER */
     .banner-slider {
-      position: relative;
-      width: 100%;
-      height: var(--height);
-      overflow: hidden;
-      background: #111;
+      position: relative; width: 100%; height: var(--height);
+      overflow: hidden; background: #111;
     }
     .slide {
-      position: absolute;
-      inset: 0;
-      display: grid;
-      place-items: center;
-      opacity: 0;
-      transform: scale(1.02);
-      transition: opacity .7s ease, transform .7s ease;
-      pointer-events: none;
+      position: absolute; inset: 0; display: grid; place-items: center;
+      opacity: 0; transform: scale(1.02);
+      transition: opacity .7s ease, transform .7s ease; pointer-events: none;
     }
     .slide.active { opacity: 1; transform: scale(1); pointer-events: auto; }
     .slide img { width: 100%; height: 100%; object-fit: cover; }
     .caption {
-      position: absolute;
-      left: 2rem;
-      bottom: 2rem;
-      max-width: 58%;
-      color: var(--accent);
-      padding: 1rem;
-      background: rgba(46, 125, 50, 0.8);
-      border-radius: 12px;
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(4px);
+      position: absolute; left: 2rem; bottom: 2rem; max-width: 58%;
+      color: var(--accent); padding: 1rem;
+      background: rgba(46, 125, 50, 0.8); border-radius: 12px;
+      box-shadow: var(--shadow); backdrop-filter: blur(4px);
     }
     .caption h2 { margin: 0 0 .35rem 0; font-size: clamp(18px, 3.2vw, 30px); }
     .caption p { margin: 0; opacity: .95; }
-
-    /* ARROWS */
     .arrow {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 6;
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      background: var(--brand);
-      color: white;
-      display: grid;
-      place-items: center;
-      cursor: pointer;
-      box-shadow: var(--shadow);
-      border: none;
+      position: absolute; top: 50%; transform: translateY(-50%);
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--brand); color: white;
+      display: grid; place-items: center; cursor: pointer;
+      box-shadow: var(--shadow); border: none; z-index: 6;
     }
-    .arrow.left { left: 1rem; }
-    .arrow.right { right: 1rem; }
-
-    /* DOTS */
+    .arrow.left { left: 1rem; } .arrow.right { right: 1rem; }
     .dots {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      bottom: 1rem;
-      display: flex;
-      gap: .5rem;
-      z-index: 7;
+      position: absolute; left: 50%; transform: translateX(-50%);
+      bottom: 1rem; display: flex; gap: .5rem; z-index: 7;
     }
     .dot {
-      width: var(--dot-size);
-      height: var(--dot-size);
-      border-radius: 50%;
-      background: rgba(255,255,255,0.5);
-      border: 2px solid var(--brand);
-      cursor: pointer;
-      transition: .3s;
+      width: var(--dot-size); height: var(--dot-size); border-radius: 50%;
+      background: rgba(255,255,255,0.5); border: 2px solid var(--brand);
+      cursor: pointer; transition: .3s;
     }
     .dot.active { background: var(--brand); transform: scale(1.1); }
 
-    @media (max-width: 768px) {
-      .navigations { display: none; }
-      .hamburger { display: flex; }
-      .options { flex-direction: column; align-items: stretch; }
-      .options select { width: 100%; }
-      .banner-slider { height: 35vh; }
-    }
-    @media (max-width: 480px) {
-      .logo img { height: 28px; }
-      .cart-logo { width: 28px; }
-      .user-profile, .user-avatar { width: 28px; height: 28px; font-size: 14px; }
-      .caption { font-size: 14px; padding: .6rem; }
-      .arrow { width: 32px; height: 32px; }
-    }
-
     /* PRODUCTS */
-.products {
-  padding: 20px;
-}
-
-.categories {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
-}
-.category-btn {
-  padding: 10px 20px;
-  border: 1px solid #aaa;
-  border-radius: 8px;
-  background: white;
-  cursor: pointer;
-  font-weight: 500;
-  transition: 0.2s;
-}
-.category-btn:hover {
-  border-color: var(--brand);
-  background: #f1f8f2;
-}
-
-.product-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 20px;
-  justify-content: center;   /* ✅ centers the grid items */
-  max-width: 1000px;         /* ✅ optional: keeps it nicely contained */
-  margin: 0 auto;   
-}
-
-.product-card {
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  padding: 15px;
-  text-align: center;
-  transition: 0.3s;
-  background: white;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-}
-.product-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-.product-card img {
-  width: 100%;
-  height: 150px;
-  object-fit: cover;
-  border-radius: 8px;
-  margin-bottom: 10px;
-}
-.product-card h3 {
-  font-size: 16px;
-  margin: 8px 0;
-}
-.product-card .price {
-  color: var(--brand);
-  font-weight: bold;
-}
-
+    .products-section { padding: 20px; }
+    .products-section h2 { margin-bottom: 15px; font-size: 22px; font-weight: bold; color: var(--brand); }
+    .products-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px;
+      
+    }
+    .product-card {
+      border: 1px solid #ddd; border-radius: 12px; overflow: hidden;
+      background: white; box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: transform 0.2s; cursor: pointer;
+    }
+    .product-card:hover { transform: translateY(-5px); }
+    .product-card img { width: 100%; height: 180px; object-fit: cover; }
+    .product-info { padding: 12px; }
+    .product-info h3 { margin: 0; font-size: 16px; font-weight: 600; color: #333; }
+    .product-info p { margin: 6px 0; font-size: 14px; color: #666; }
+    .product-info .price { color: var(--brand); font-weight: bold; font-size: 15px; }
   </style>
 </head>
 <body>
   <div class="landing-page"></div>
 
-  <!-- ✅ React CDN -->
+  <!-- React CDN -->
   <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
   <script type="text/babel">
-   function Header() {
+    function Header() {
       const [user, setUser] = React.useState(null);
-      const [menuOpen, setMenuOpen] = React.useState(false);
 
       React.useEffect(() => {
-        const token = sessionStorage.getItem("token");
+        const token = localStorage.getItem("token");
         if (!token) return;
-        fetch("/api/me", { headers: { Authorization: "Bearer " + token } })
+
+        fetch("/api/me", {
+          headers: { "Authorization": "Bearer " + token }
+        })
           .then(res => res.ok ? res.json() : null)
-          .then(data => { if (data) setUser(data); })
-          .catch(err => console.error(err));
+          .then(data => setUser(data))
+          .catch(err => console.error("User fetch failed:", err));
       }, []);
 
-      function goToProfile() { window.location.href = "profile.html"; }
-
-      function UserAvatar({ user }) {
-        if (user.profile_pic && user.profile_pic !== "/img/default-user.png") {
-          return (
-            <img className="user-profile" src={user.profile_pic} alt="Profile" onClick={goToProfile}/>
-          );
-        }
-        const letter = user.name ? user.name.charAt(0).toUpperCase() : "U";
-        return <div className="user-avatar" onClick={goToProfile}>{letter}</div>;
-      }
-
-      function NavLinks() {
-        return (
-          <>
-            <a>My Listings</a>
-            <a>Add Product</a>
-            <a>About</a>
-            <a>Contact</a>
-            {!user && <a href="login.html">Login</a>}
-            {!user && <a href="signup.html">SignUp</a>}
-          </>
-        );
-      }
-
       return (
-        <>
-          <div className="header">
-            <div className="logo">
-              <img src="img/logo.png" alt="EcoFinds Logo"/>
-            </div>
-            <div className="navigations">
-              <NavLinks/>
-            </div>
-            <div className="cart-user">
-              <img className="cart-logo" src="img/cart-logo.png" alt="Cart"/>
-              {user ? <UserAvatar user={user}/> :
-                <img className="user-profile" src="img/default-user.png" alt="User"
-                     onClick={() => window.location.href="login.html"}/>}
-              <div className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
-                <span></span><span></span><span></span>
+        <div className="header">
+          <div className="logo"><img src="img/logo.png" alt="EcoFinds Logo"/></div>
+          <div className="navigations">
+            <a href="listings.html">My Listings</a>
+            <a href="add-product.html">Add Product</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+            {!user && <a href="login.html">Login</a>}
+          </div>
+          <div className="cart-user">
+            {/* ✅ Cart always goes to cart.html */}
+            <img
+              className="cart-logo"
+              src="img/cart-logo.png"
+              alt="Cart"
+              onClick={() => (window.location.href = "cart.html")}
+            />
+            {user ? (
+              user.profile_pic ? (
+                <img
+                  className="user-avatar"
+                  src={user.profile_pic}
+                  alt={user.name}
+                  onClick={() => (window.location.href = "profile.html")}
+                />
+              ) : (
+                <div
+                  className="user-avatar"
+                  onClick={() => (window.location.href = "profile.html")}
+                >
+                  {user.name ? user.name[0].toUpperCase() : "U"}
+                </div>
+              )
+            ) : (
+              <div
+                className="user-avatar"
+                onClick={() => (window.location.href = "login.html")}
+              >
+                U
               </div>
-            </div>
+            )}
           </div>
-
-          <div className={`mobile-nav ${menuOpen ? "open" : ""}`}>
-            <NavLinks/>
-          </div>
-        </>
+        </div>
       );
     }
 
@@ -374,139 +203,112 @@
     function Options() {
       return (
         <div className="options">
-          <select defaultValue="">
-            <option value="" disabled hidden>Sort By</option>
-            <option value="price-low-high">Price: Low → High</option>
-            <option value="price-high-low">Price: High → Low</option>
-            <option value="newest">Newest First</option>
-            <option value="oldest">Oldest First</option>
-            <option value="rating">Customer Rating</option>
-          </select>
-          <select defaultValue="">
-            <option value="" disabled hidden>Filter By</option>
-            <option value="brand">Brand</option>
-            <option value="condition-new">Condition: New</option>
-            <option value="condition-used">Condition: Used</option>
-            <option value="in-stock">Availability: In Stock</option>
-            <option value="discount">On Discount</option>
-            <option value="rating-4plus">Rating: 4★ & above</option>
-          </select>
-          <select defaultValue="">
-            <option value="" disabled hidden>Group By</option>
-            <option value="category">Category</option>
-            <option value="price-range">Price Range</option>
-            <option value="condition">Condition</option>
-            <option value="seller">Seller</option>
-            <option value="location">Location</option>
-            <option value="date">Date Added</option>
-          </select>
+          <select defaultValue=""><option value="" disabled hidden>Sort By</option><option>Price: Low → High</option><option>Price: High → Low</option></select>
+          <select defaultValue=""><option value="" disabled hidden>Filter By</option><option>Condition: New</option><option>Condition: Used</option></select>
+          <select defaultValue=""><option value="" disabled hidden>Group By</option><option>Category</option><option>Price Range</option></select>
         </div>
       );
     }
 
-    /* Banner code unchanged ... */
-    // keep your Banner + App as is
     function Banner() {
       React.useEffect(() => {
-        const slider = document.getElementById('banner');
-        const slides = Array.from(slider.querySelectorAll('.slide'));
-        const prevBtn = document.getElementById('prev');
-        const nextBtn = document.getElementById('next');
-        const dotsWrap = document.getElementById('dots');
-        let current = 0, timer = null;
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.dot');
+        let current = 0;
 
-        function goTo(index) {
-          if(index < 0) index = slides.length - 1;
-          if(index >= slides.length) index = 0;
-          slides.forEach((s,i)=> s.classList.toggle('active', i===index));
-          updateDots(index);
-          current = index;
+        function goTo(i) {
+          slides.forEach((s, idx) => s.classList.toggle('active', idx === i));
+          dots.forEach((d, idx) => d.classList.toggle('active', idx === i));
+          current = i;
         }
-        function next(){ goTo(current + 1) }
-        function prev(){ goTo(current - 1) }
+        function next() { goTo((current + 1) % slides.length); }
+        function prev() { goTo((current - 1 + slides.length) % slides.length); }
 
-        slides.forEach((_,i)=>{
-          const d = document.createElement('button');
-          d.className = 'dot' + (i===0? ' active':'' );
-          d.addEventListener('click', ()=>{ goTo(i); resetTimer(); });
-          dotsWrap.appendChild(d);
-        });
-        function updateDots(idx){
-          Array.from(dotsWrap.children).forEach((d,i)=> d.classList.toggle('active', i===idx));
-        }
+        document.getElementById('next').onclick = next;
+        document.getElementById('prev').onclick = prev;
+        dots.forEach((d, i) => d.onclick = () => goTo(i));
 
-        prevBtn.addEventListener('click', ()=>{ prev(); resetTimer(); });
-        nextBtn.addEventListener('click', ()=>{ next(); resetTimer(); });
-
-        function startTimer(){ timer = setInterval(()=>{ next(); }, 3000); }
-        function stopTimer(){ clearInterval(timer); timer = null; }
-        function resetTimer(){ stopTimer(); startTimer(); }
-
-        goTo(0);
-        startTimer();
+        const timer = setInterval(next, 4000);
+        return () => clearInterval(timer);
       }, []);
 
       return (
-        <section className="banner-slider" id="banner">
+        <section className="banner-slider">
           <div className="slide active">
             <img src="img/slide-image-1.jpg" alt="Sustainable Living"/>
-            <div className="caption">
-              <h2>Welcome to EcoFinds</h2>
-              <p>Discover sustainable second-hand treasures today.</p>
-            </div>
+            <div className="caption"><h2>Welcome to EcoFinds</h2><p>Discover sustainable second-hand treasures today.</p></div>
           </div>
           <div className="slide">
             <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=1600&auto=format&fit=crop" alt="Second-hand Clothing"/>
-            <div className="caption">
-              <h2>Reduce. Reuse. Resell.</h2>
-              <p>Support the planet while shopping smart.</p>
-            </div>
+            <div className="caption"><h2>Reduce. Reuse. Resell.</h2><p>Support the planet while shopping smart.</p></div>
           </div>
           <div className="slide">
             <img src="https://images.unsplash.com/photo-1585386959984-a4155223f7f9?q=80&w=1600&auto=format&fit=crop" alt="Eco-friendly Products"/>
-            <div className="caption">
-              <h2>Eco-Friendly Marketplace</h2>
-              <p>Join our community of conscious consumers.</p>
-            </div>
+            <div className="caption"><h2>Eco-Friendly Marketplace</h2><p>Join our community of conscious consumers.</p></div>
           </div>
           <button className="arrow left" id="prev">‹</button>
           <button className="arrow right" id="next">›</button>
-          <div className="dots" id="dots"></div>
+          <div className="dots">
+            <span className="dot active"></span>
+            <span className="dot"></span>
+            <span className="dot"></span>
+          </div>
         </section>
       );
     }
 
     function Products() {
-  const categories = ["All Categories"];
-  const products = [
-    { id: 1, name: "Eco Tote Bag", img: "img/product1.jpg", price: "$15" },
-    { id: 2, name: "Recycled Bottle", img: "img/product2.jpg", price: "$10" },
-    { id: 3, name: "Bamboo Toothbrush", img: "img/product3.jpg", price: "$5" },
-    { id: 4, name: "Organic T-Shirt", img: "img/product4.jpg", price: "$20" },
-  ];
+      const [products, setProducts] = React.useState([]);
 
-  return (
-    <section className="products">
-      {/* Categories Bar */}
-      <div className="categories">
-        {categories.map((c, i) => (
-          <button key={i} className="category-btn">{c}</button>
-        ))}
-      </div>
+      React.useEffect(() => {
+        fetch("/api/products")
+          .then(res => res.ok ? res.json() : [])
+          .then(data => {
+            if (data.length) setProducts(data);
+            else {
+              setProducts([
+                { id: 1, name: "Eco Tote Bag", price: 15, description: "Reusable and stylish tote bag.", image: "img/tote-bag.jpg" },
+                { id: 2, name: "Recycled Bottle", price: 10, description: "Eco-friendly reusable bottle.", image: "img/recycled-bottle.jpg" },
+                { id: 3, name: "Bamboo Toothbrush", price: 5, description: "Sustainable bamboo toothbrush.", image: "img/bamboo-toothbrush.jpg" },
+                { id: 4, name: "Organic T-Shirt", price: 20, description: "Soft cotton organic t-shirt.", image: "img/organic-tshirt.jpg" }
+              ]);
+            }
+          })
+          .catch(() => {
+            setProducts([
+              { id: 1, name: "Eco Tote Bag", price: 15, description: "Reusable and stylish tote bag.", image: "img/tote-bag.jpg" },
+              { id: 2, name: "Recycled Bottle", price: 10, description: "Eco-friendly reusable bottle.", image: "img/recycled-bottle.jpg" },
+              { id: 3, name: "Bamboo Toothbrush", price: 5, description: "Sustainable bamboo toothbrush.", image: "img/bamboo-toothbrush.jpg" },
+              { id: 4, name: "Organic T-Shirt", price: 20, description: "Soft cotton organic t-shirt.", image: "img/organic-tshirt.jpg" }
+            ]);
+          });
+      }, []);
 
-      {/* Product Grid */}
-      <div className="product-grid">
-        {products.map(p => (
-          <div key={p.id} className="product-card">
-            <img src={p.img} alt={p.name}/>
-            <h3>{p.name}</h3>
-            <p className="price">{p.price}</p>
+      function goToProduct(id) {
+        window.location.href = `product.html?id=${id}`;
+      }
+
+      return (
+        <center>
+        <section className="products-section">
+          <h2>Products</h2>
+         
+          <div className="products-grid">
+            {products.map((p) => (
+              <div key={p.id || p._id} className="product-card" onClick={() => goToProduct(p.id || p._id)}>
+                <img src={p.image || "img/placeholder.png"} alt={p.name}/>
+                <div className="product-info">
+                  <h3>{p.name}</h3>
+                  <p className="price">${p.price}</p>
+                  <p>{p.description}</p>
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-    </section>
-  );
-}
+        </section>
+        </center>
+      );
+    }
 
     function App() {
       return (

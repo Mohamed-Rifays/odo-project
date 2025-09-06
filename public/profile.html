@@ -174,113 +174,107 @@
     </div>
   </div>
 
-  <script>
-    let currentUser = null;
-    let isEditing = false;
+<script>
+  let currentUser = null;
+  let isEditing = false;
 
-    async function loadUserProfile() {
-      const token = sessionStorage.getItem("token");
-      if (!token) {
+  async function loadUserProfile() {
+    const token = localStorage.getItem("token"); // ✅ changed from sessionStorage
+    if (!token) {
+      window.location.href = "login.html";
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/me", {
+        headers: { "Authorization": "Bearer " + token }
+      });
+
+      if (!res.ok) {
+        localStorage.removeItem("token"); // ✅ clear from localStorage
         window.location.href = "login.html";
         return;
       }
 
-      try {
-        const res = await fetch("/api/me", {
-          headers: { "Authorization": "Bearer " + token }
-        });
+      currentUser = await res.json();
+      const firstLetter = currentUser.name ? currentUser.name.charAt(0).toUpperCase() : "U";
 
-        if (!res.ok) {
-          sessionStorage.removeItem("token");
-          window.location.href = "login.html";
-          return;
-        }
+      const headerAvatar = document.getElementById("headerUserAvatar");
+      const bigAvatar = document.getElementById("bigAvatar");
 
-        currentUser = await res.json();
-
-        // ✅ Letter avatar fallback
-        const firstLetter = currentUser.name ? currentUser.name.charAt(0).toUpperCase() : "U";
-
-        const headerAvatar = document.getElementById("headerUserAvatar");
-        const bigAvatar = document.getElementById("bigAvatar");
-
-        if (currentUser.profile_pic && currentUser.profile_pic !== "/img/default-user.png") {
-          headerAvatar.outerHTML = `<img id="headerUserPic" class="user-profile" src="${currentUser.profile_pic}" alt="User">`;
-          bigAvatar.outerHTML = `<img id="profilePic" src="${currentUser.profile_pic}" alt="User Avatar">`;
-        } else {
-          headerAvatar.textContent = firstLetter;
-          bigAvatar.textContent = firstLetter;
-        }
-
-        // Update user info
-        document.getElementById("userName").textContent = currentUser.name;
-        document.getElementById("userEmail").textContent = currentUser.email;
-        document.getElementById("userJoined").textContent = new Date(currentUser.createdAt).toLocaleDateString();
-      } catch (err) {
-        console.error(err);
-        alert("Error loading profile");
+      if (currentUser.profile_pic && currentUser.profile_pic !== "/img/default-user.png") {
+        headerAvatar.outerHTML = `<img id="headerUserPic" class="user-profile" src="${currentUser.profile_pic}" alt="User">`;
+        bigAvatar.outerHTML = `<img id="profilePic" src="${currentUser.profile_pic}" alt="User Avatar">`;
+      } else {
+        headerAvatar.textContent = firstLetter;
+        bigAvatar.textContent = firstLetter;
       }
+
+      document.getElementById("userName").textContent = currentUser.name;
+      document.getElementById("userEmail").textContent = currentUser.email;
+      document.getElementById("userJoined").textContent = new Date(currentUser.createdAt).toLocaleDateString();
+    } catch (err) {
+      console.error(err);
+      alert("Error loading profile");
     }
+  }
 
-    // Toggle Edit/Save
-    document.addEventListener("DOMContentLoaded", () => {
-      const editBtn = document.getElementById("editBtn");
-      const profileInfo = document.getElementById("profileInfo");
+  document.addEventListener("DOMContentLoaded", () => {
+    const editBtn = document.getElementById("editBtn");
+    const profileInfo = document.getElementById("profileInfo");
 
-      editBtn.addEventListener("click", async () => {
-        if (!isEditing) {
-          // Switch to Edit Mode
+    editBtn.addEventListener("click", async () => {
+      if (!isEditing) {
+        profileInfo.innerHTML = `
+          <p><strong>Name:</strong> <input id="editName" type="text" value="${currentUser.name}"></p>
+          <p><strong>Email:</strong> <input id="editEmail" type="email" value="${currentUser.email}"></p>
+          <p><strong>Joined:</strong> ${new Date(currentUser.createdAt).toLocaleDateString()}</p>
+        `;
+        editBtn.textContent = "Save";
+        isEditing = true;
+      } else {
+        const newName = document.getElementById("editName").value;
+        const newEmail = document.getElementById("editEmail").value;
+
+        try {
+          const token = localStorage.getItem("token"); // ✅ changed
+          const res = await fetch("/api/me", {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": "Bearer " + token
+            },
+            body: JSON.stringify({ name: newName, email: newEmail })
+          });
+
+          if (!res.ok) throw new Error("Failed to update profile");
+
+          const updatedUser = await res.json();
+          currentUser = updatedUser;
+
           profileInfo.innerHTML = `
-            <p><strong>Name:</strong> <input id="editName" type="text" value="${currentUser.name}"></p>
-            <p><strong>Email:</strong> <input id="editEmail" type="email" value="${currentUser.email}"></p>
-            <p><strong>Joined:</strong> ${new Date(currentUser.createdAt).toLocaleDateString()}</p>
+            <p><strong>Name:</strong> <span id="userName">${updatedUser.name}</span></p>
+            <p><strong>Email:</strong> <span id="userEmail">${updatedUser.email}</span></p>
+            <p><strong>Joined:</strong> ${new Date(updatedUser.createdAt).toLocaleDateString()}</p>
           `;
-          editBtn.textContent = "Save";
-          isEditing = true;
-        } else {
-          // Save mode
-          const newName = document.getElementById("editName").value;
-          const newEmail = document.getElementById("editEmail").value;
 
-          try {
-            const token = sessionStorage.getItem("token");
-            const res = await fetch("/api/me", {
-              method: "PUT",
-              headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer " + token
-              },
-              body: JSON.stringify({ name: newName, email: newEmail })
-            });
-
-            if (!res.ok) throw new Error("Failed to update profile");
-
-            const updatedUser = await res.json();
-            currentUser = updatedUser;
-
-            profileInfo.innerHTML = `
-              <p><strong>Name:</strong> <span id="userName">${updatedUser.name}</span></p>
-              <p><strong>Email:</strong> <span id="userEmail">${updatedUser.email}</span></p>
-              <p><strong>Joined:</strong> ${new Date(updatedUser.createdAt).toLocaleDateString()}</p>
-            `;
-
-            editBtn.textContent = "Edit";
-            isEditing = false;
-          } catch (err) {
-            alert("Error updating profile");
-            console.error(err);
-          }
+          editBtn.textContent = "Edit";
+          isEditing = false;
+        } catch (err) {
+          alert("Error updating profile");
+          console.error(err);
         }
-      });
-
-      // Logout
-      document.getElementById("logoutBtn").addEventListener("click", () => {
-        sessionStorage.removeItem("token");
-        window.location.href = "login.html";
-      });
+      }
     });
 
-    loadUserProfile();
-  </script>
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      localStorage.removeItem("token"); // ✅ changed
+      window.location.href = "login.html";
+    });
+  });
+
+  loadUserProfile();
+</script>
+
 </body>
 </html>

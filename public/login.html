@@ -78,7 +78,6 @@
 </head>
 <body>
 
-  <!-- login box -->
   <div class="login-box">
     <div class="logo-container">
       <img src="https://img.icons8.com/color/96/000000/leaf.png" alt="Company Logo">
@@ -116,9 +115,15 @@
         const data = await res.json();
 
         if (res.ok) {
-          // save token in session storage
-          sessionStorage.setItem("token", data.token);
-          // redirect to landing page
+          // ✅ save token in localStorage (so index.html can read it)
+          localStorage.setItem("token", data.token);
+
+          // (optional) save user info if API returns it
+          if (data.user) {
+            localStorage.setItem("user", JSON.stringify(data.user));
+          }
+
+          // redirect to home page
           window.location.href = "index.html";
         } else {
           errorMsg.textContent = data.message || "Login failed";

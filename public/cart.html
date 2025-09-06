@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Cart</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4fdf6;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+
+    /* Navbar/Header */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #2e7d32;
+      padding: 12px 24px;
+      color: white;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    }
+
+    .navbar .logo {
+      height: 40px;
+    }
+
+    .cart-profile {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .cart-profile .cart {
+      font-size: 22px;
+      cursor: pointer;
+    }
+
+    .cart-profile .profile {
+      width: 40px;
+      height: 40px;
+      background: white;
+      color: #2e7d32;
+      font-weight: bold;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+
+    .cart-profile .profile img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    /* Cart Page */
+    .cart-page {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 30px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+    }
+
+    .cart-page h2 {
+      font-size: 28px;
+      margin-bottom: 25px;
+      color: #2e7d32;
+      border-bottom: 2px solid #e0e0e0;
+      padding-bottom: 10px;
+    }
+
+    .cart-item {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .cart-item img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .cart-item .info {
+      flex: 1;
+    }
+
+    .cart-item .info h4 {
+      margin: 0 0 6px;
+      font-size: 18px;
+      color: #333;
+    }
+
+    .cart-item .info p {
+      margin: 0;
+      font-size: 14px;
+      color: #666;
+    }
+
+    .cart-summary {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 2px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .cart-summary h3 {
+      font-size: 22px;
+      color: #333;
+    }
+
+    .checkout-btn {
+      padding: 14px 28px;
+      font-size: 16px;
+      background: #2e7d32;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.2s;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .checkout-btn:hover {
+      background: #1b5e20;
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <img src="/img/logo.png" alt="Logo" class="logo">
+    <div class="cart-profile">
+      <span class="cart">🛒</span>
+      <div class="profile" id="user-profile">R</div>
+    </div>
+  </header>
+
+  <main class="cart-page">
+    <h2>Your Shopping Cart</h2>
+    <div id="cart-items"></div>
+    <div class="cart-summary">
+      <h3>Total: <span id="cart-total">$0.00</span></h3>
+      <button class="checkout-btn">Checkout</button>
+    </div>
+  </main>
+
+  <script>
+    // 🔹 Load Cart Items
+    function renderCart() {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const cartItemsDiv = document.getElementById("cart-items");
+      const totalEl = document.getElementById("cart-total");
+
+      if (cart.length === 0) {
+        cartItemsDiv.innerHTML = "<p>Your cart is empty.</p>";
+        totalEl.textContent = "$0.00";
+        return;
+      }
+
+      let total = 0;
+      cartItemsDiv.innerHTML = "";
+      cart.forEach(item => {
+        const itemDiv = document.createElement("div");
+        itemDiv.className = "cart-item";
+        itemDiv.innerHTML = `
+          <img src="${item.img}" alt="${item.name}">
+          <div class="info">
+            <h4>${item.name}</h4>
+            <p>${item.price} × ${item.quantity}</p>
+          </div>
+        `;
+        cartItemsDiv.appendChild(itemDiv);
+
+        total += parseFloat(item.price.replace("$", "")) * item.quantity;
+      });
+
+      totalEl.textContent = "$" + total.toFixed(2);
+    }
+
+    renderCart();
+
+    // 🔹 Load Current User
+    async function loadUser() {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      try {
+        const res = await fetch("/api/me", {
+          headers: { "Authorization": "Bearer " + token }
+        });
+        const user = await res.json();
+
+        const profileEl = document.getElementById("user-profile");
+        if (user.profile_pic) {
+          profileEl.innerHTML = `<img src="${user.profile_pic}" alt="User">`;
+        } else {
+          profileEl.textContent = user.name ? user.name[0].toUpperCase() : "U";
+        }
+      } catch (err) {
+        console.error("Failed to load user", err);
+      }
+    }
+
+    loadUser();
+  </script>
+</body>
+</html>
