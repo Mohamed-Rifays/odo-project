@@ -9,7 +9,7 @@ import jwt from 'jsonwebtoken';
 const app = express();
 app.use(cors());
 app.use(express.json());
-
+const port = process.env.PORT ||5000;
 // For file paths
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -226,6 +226,6 @@ app.delete('/api/products/:id', authMiddleware, async (req, res) => {
 });
 
 
-app.listen(5000, '0.0.0.0', () => {
+app.listen(port, '0.0.0.0', () => {
   console.log("🚀 Server running on http://localhost:5000");
 });
